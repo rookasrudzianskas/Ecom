@@ -8,6 +8,6 @@ export const client = createClient({
   apiVersion,
   useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
   stega: {
-    studioUrl: "http://localhost:3000/studio",
-  }
-})
+    studioUrl: process.env.VERCEL_URL ? `http://${process.env.VERCEL_URL}/studio` : `${process.env.NEXT_PUBLIC_BASE_URL}/studio`,
+  },
+});
