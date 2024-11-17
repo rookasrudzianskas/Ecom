@@ -277,6 +277,11 @@ export type SanityImageMetadata = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Sale | Order | Product | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/lib/sales/getActiveSaleByCouponCode.ts
+// Variable: ACTIVE_SALE_BY_COUPON_QUERY
+// Query: *[_type == "sale" && couponCode == $couponCode && isActive == true]    | order(validFrom desc)[0]
+export type ACTIVE_SALE_BY_COUPON_QUERYResult = null;
+
 // Source: ./sanity/lib/products/getAllCategories.tsx
 // Variable: ALL_CATEGORIES_QUERY
 // Query: *[_type == "category"] | order(name asc)
@@ -358,6 +363,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "\n    *[_type == \"sale\" && couponCode == $couponCode && isActive == true]\n    | order(validFrom desc)[0]\n  ": ACTIVE_SALE_BY_COUPON_QUERYResult;
     "\n  *[_type == \"category\"] | order(name asc)\n  ": ALL_CATEGORIES_QUERYResult;
     "\n  *[_type == \"product\"] | order(name asc)\n  ": ALL_PRODUCTS_QUERYResult;
   }

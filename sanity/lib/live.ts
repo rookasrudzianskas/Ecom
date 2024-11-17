@@ -7,7 +7,7 @@ if(!token) {
   throw new Error("Missing SANITY_API_READ_TOKEN");
 }
 
-export const { sanityFetch, sanityLive } = defineLive({
+export const { sanityFetch, SanityLive } = defineLive({
   client,
   serverToken: token,
   browserToken: token,
