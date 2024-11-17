@@ -4,9 +4,10 @@ import {sanityFetch} from "@/sanity/lib/live";
 
 export const getActiveSaleByCouponCode = async (couponCode: CouponCode) => {
   const ACTIVE_SALE_BY_COUPON_QUERY = defineQuery(`
-    *[_type == "sale" && couponCode == $couponCode && isActive == true]
+    *[_type == "sale" && isActive == true && couponCode == $couponCode] 
     | order(validFrom desc)[0]
   `);
+
 
   try {
     const activeSale = await sanityFetch({
@@ -21,5 +22,4 @@ export const getActiveSaleByCouponCode = async (couponCode: CouponCode) => {
     console.error("Error fetching active sale by coupon code:", error);
     return null;
   }
-
 }
