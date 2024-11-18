@@ -7,7 +7,7 @@ import {imageUrl} from "@/lib/imageUrl";
 export type Metadata = {
   orderNumber: string;
   customerName: string;
-  email: string;
+  customerEmail: string;
   clerkUserId: string;
 }
 
@@ -27,7 +27,7 @@ export async function createCheckoutSession(
     }
 
     const customers = await stripe.customers.list({
-      email: metadata.email,
+      email: metadata.customerEmail,
       limit: 1,
     });
 
@@ -61,6 +61,8 @@ export async function createCheckoutSession(
           quantity: item.quantity,
         })),
     });
+
+    return session.url;
   } catch (error) {
     console.error(error);
     throw new Error("Error creating checkout session");

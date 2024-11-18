@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 import AddToBasketButton from "@/components/add-to-basket-button";
 import Image from "next/image";
 import {imageUrl} from "@/lib/imageUrl";
-import {Metadata} from "@/actions/createCheckoutSession";
+import {createCheckoutSession, Metadata} from "@/actions/createCheckoutSession";
 
 const BasketPage = ({}) => {
   const groupedItems = useBasketStore((state) => state.getGroupedItems());
@@ -20,8 +20,18 @@ const BasketPage = ({}) => {
 
   useEffect(() => {
     setIsClient(true);
-    console.log("ROKAS");
   }, []);
+
+  if(!isClient) return null;
+
+  if(groupedItems.length === 0) {
+    return (
+      <div className={'container mx-auto p-4 flex flex-col items-center justify-center min-h-[50vh]'}>
+        <h1 className={'text-2xl font-bold mb-6 text-gray-800'}>Your Basket</h1>
+        <p className={'text-gray-600 text-lg'}>Your basket is empty</p>
+      </div>
+    )
+  }
 
   const handleCheckout = async () => {
     if(!isSignedIn) return;
@@ -31,7 +41,7 @@ const BasketPage = ({}) => {
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
         customerName: user?.fullName ?? "Anonymous",
-        email: user?.emailAddresses[0].emailAddress ?? "anonymous@example.com",
+        customerEmail: user?.emailAddresses[0].emailAddress ?? "anonymous@example.com",
         clerkUserId: user!.id,
       };
 
@@ -48,17 +58,6 @@ const BasketPage = ({}) => {
     } finally {
       setIsLoading(false);
     }
-  }
-
-  if(!isClient) return null;
-
-  if(groupedItems.length === 0) {
-    return (
-      <div className={'container mx-auto p-4 flex flex-col items-center justify-center min-h-[50vh]'}>
-        <h1 className={'text-2xl font-bold mb-6 text-gray-800'}>Your Basket</h1>
-        <p className={'text-gray-600 text-lg'}>Your basket is empty</p>
-      </div>
-    )
   }
   return (
     <div className={'container mx-auto p-4 max-w-6xl'}>
