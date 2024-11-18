@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import Image from "next/image";
 import {imageUrl} from "@/lib/imageUrl";
 import {PortableText} from "next-sanity";
+import {Button} from "@/components/ui/button";
+import AddToBasketButton from "@/components/add-to-basket-button";
 const ProductPage = async ({params}: { params: Promise<{ slug: string }> }) => {
   const {slug} = await params;
   const product = await getProductBySlug(slug);
@@ -44,6 +46,9 @@ const ProductPage = async ({params}: { params: Promise<{ slug: string }> }) => {
                 <PortableText value={product.description} />
               )}
             </div>
+          </div>
+          <div className={'mt-6'}>
+            <AddToBasketButton product={product} disabled={isOutOfStock} />
           </div>
         </div>
       </div>
