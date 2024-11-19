@@ -6,9 +6,15 @@ import {imageUrl} from "@/lib/imageUrl";
 import {PortableText} from "next-sanity";
 import {Button} from "@/components/ui/button";
 import AddToBasketButton from "@/components/add-to-basket-button";
+
+export const dynamic = "force-static";
+export const revalidate = 60;
+
 const ProductPage = async ({params}: { params: Promise<{ slug: string }> }) => {
   const {slug} = await params;
   const product = await getProductBySlug(slug);
+
+  console.log(crypto.randomUUID().slice(0, 50) + "render the product page");
 
   if(!product) {
     return <notFound />;

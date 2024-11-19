@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {router} from "next/client";
 import {useDraftModeEnvironment} from "@sanity/next-loader/hooks";
