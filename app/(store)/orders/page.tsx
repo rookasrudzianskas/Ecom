@@ -109,7 +109,7 @@ const Orders = async ({}) => {
                           </div>
                         </div>
 
-                        <p className={'font-medium text-right font-bold'}>
+                        <p className={'text-right font-bold'}>
                           {product.product?.price && product.quantity ? formatCurrency(product.product.price * product.quantity, order.currency) : "N/A"}
                         </p>
                       </div>
