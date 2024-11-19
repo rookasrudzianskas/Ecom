@@ -3,6 +3,7 @@ import {headers} from "next/headers";
 import stripe from "@/lib/stripe";
 import Stripe from "stripe";
 import {Metadata} from "@/actions/createCheckoutSession";
+import {backendClient} from "@/sanity/lib/backendClient";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -64,5 +65,31 @@ async function createOrderInSanity(session: Stripe.Checkout.Session) {
     }
   );
 
+  const sanityProducts = lineItemsWithProduct.data.map((item) => ({
+    _key: crypto.randomUUID(),
+    product: {
+      _type: "reference",
+      _ref: (item.price?.product as Stripe.Product)?.metadata?.id,
+    },
+    quantity: item.quantity || 0,
+  }));
 
+  const order = await backendClient.create({
+    _type: "order",
+    orderNumber,
+    stripeCheckoutSessionId: id,
+    stripePaymentIntentId: payment_intent,
+    customerName,
+    stripeCustomerId: customer,
+    clerkUserId: clerkUserId,
+    email: customerEmail,
+    currency: currency,
+    amountDiscount: total_details?.amount_discount ? total_details.amount_discount / 100 : 0,
+    products: sanityProducts,
+    totalAmount: amount_total ? amount_total / 100 : 0,
+    status: "paid",
+    orderDate: new Date().toISOString(),
+  });
+
+  return order;
 }
